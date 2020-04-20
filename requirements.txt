@@ -1,0 +1,6 @@
+#This requirements file is found by the DockerFile and installs all the relevant packages needed which are listed below
+pip
+Flask
+cassandra-driver
+requests
+requests_cache

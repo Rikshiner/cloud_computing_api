@@ -1,0 +1,43 @@
+#Instructions for using my Ghibli films csv in Cassandra to be called by the API
+
+#Update all files and packages to make sure they are up to date
+sudo apt update
+
+#Install docker if it's not already installed
+sudo apt install docker.io
+
+#Pull Cassandra from docker images
+sudo docker pull cassandra:latest
+
+#Run the Cassandra docker image as 'ghibli_films' at port 9042
+sudo docker run --name ghibli_films -p 9042:9042 -d cassandra:latest
+
+#Copy my csv data (From the orginal api) to the container inside the home file
+sudo docker cp ghibli_films.csv ghibli_films:home/ghibli_films.csv
+
+#Open CQL Shell to create the table
+sudo docker exec -it ghibli_films cqlsh
+
+#Creating the Keysapce for the table itself, called Ghibli
+CREATE KEYSPACE ghibli WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1};
+
+#Create the Table we wish to use (In this case Films table) with all the relevant headers, their data type and the Primary Key for this table (Title)
+CREATE TABLE ghibli.films (id text, title text PRIMARY KEY, description text, director text, producer text, release_date int, rt_score int);
+
+#Finally copy the csv file to this table with all the headers organised, a file to copy to and a delimeter to split the CSV file correctly
+COPY ghibli.films(id,title,description,director,producer,release_date,rt_score) FROM '/home/ghibli_films.csv' WITH DELIMITER=',' AND HEADER=TRUE;
+
+#Simple test to ensure it is running correctly by finding the film details for When Marnie was There. This container running Cassandra is left running
+SELECT * from ghibli.films where title = 'When Marnie Was There' ALLOW FILTERING;
+
+#Exit the cqlsh
+exit
+
+#This is then used to find the IP address of the container to allow my api to connect to it
+sudo docker inspect ghibli_films
+
+#Finally build a separate API container to hold our API which can then call to the Cassandra container for data
+sudo docker build . --tag=cassandrarest:v1
+
+#Run the API container at Port 80 to start the API with both this and the cassandra container running at the same time
+sudo docker run -p 80:80 cassandrarest:v1
