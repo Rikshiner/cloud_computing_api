@@ -34,10 +34,12 @@ Internally there are 4 main requests that can be used at "AWS_URL/ghibli", these
 
 Externally I call the Studio Ghibli API for additional fuinctionality around Characters, this can be done at the "AWS_URL/characters" URL to search for information around Characters within Studio Ghibli films. It has only a GET functionality as I cannot edit an external API's data:
 
-1) My external GET request provides information around characters that appear in Studio Ghibli films including their name, age and gender. This can be done by searching the characters name at the "AWS_URL/characters/<name>" URL which sends a request to the external Studion Ghibli API and recieves an object back with the relevant data. This data is then made formatted into a JSON before being displayed to the user. Again if this is sucessful the user will recieve notice of this but if the character is not found the user is also alerted.
+1) GET request for the External API provides information around characters that appear in Studio Ghibli films including their name, age and gender. This can be done by searching the characters name at the "AWS_URL/characters/<name>" URL which sends a request to the external Studion Ghibli API and recieves an object back with the relevant data. This data is then made formatted into a JSON before being displayed to the user. Again if this is sucessful the user will recieve notice of this but if the character is not found the user is also alerted.
   
 This covers all the information around the goals of the API, it's basic setup and functionality. The files containing or pertaining to the code are also commented to show what each function does. 
 
-Note: The data has not been commented  as it simply shows the column headers and the data itself which is self explanatory. The DockerFile and requirements files also have basic comments but are covered more in the Readme as they are quite short whilst the Cassandra commands and app.py contain step by step comments to describe the process.
+# Extras
+
+Note: The data has not been commented  as it simply shows the column headers and the data itself which is self explanatory. The DockerFile and requirements files also have basic comments but are also covered in the Readme as they are quite short whilst the Cassandra commands and app.py contain step by step comments to describe the process used.
 
 Thank you for reading
